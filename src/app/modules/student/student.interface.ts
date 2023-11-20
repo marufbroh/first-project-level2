@@ -1,26 +1,32 @@
 import { Schema, model, connect } from 'mongoose';
 
-export type Guardian = {
+export type UserName = {
+    firstName: string;
+    middleName: string;
+    lastName: string;
+}
 
+export type Guardian = {
     fatherName: string;
     fatherOccupation: string;
     fatherContactNo: string;
-
     motherName: string;
     motherOccupation: string;
     motherContactNo: string;
+}
 
+export type LocalGuardian = {
+    name: string;
+    occupation: string;
+    address: string;
+    contactNo: string;
 }
 
 export type Student = {
     id: string;
-    name: {
-        firstName: string;
-        middleName: string;
-        lastName: string;
-    }
+    name: UserName;
     gender: "male" | "female";
-    dateOfBirth: string;
+    dateOfBirth?: string;
     email: string;
     contactNo: string;
     emergencyContactNo: string;
@@ -28,5 +34,8 @@ export type Student = {
     presentAddress: string;
     permanentAddress: string;
     guardian: Guardian;
+    localGuardian: LocalGuardian;
+    profileImg?: string; // amra database a URL lakhbo
+    isActive: "active" | "blocked",
 }
 
