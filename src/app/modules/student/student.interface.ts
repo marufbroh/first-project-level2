@@ -38,6 +38,7 @@ export type TStudent = {
     localGuardian: TLocalGuardian;
     profileImg?: string; // amra database a URL lakhbo
     isActive: "active" | "blocked",
+    isDeleted: boolean
 }
 
 

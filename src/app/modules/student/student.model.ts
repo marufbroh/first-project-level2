@@ -3,6 +3,7 @@ import validator from 'validator';
 import { TGuardian, TLocalGuardian, TStudent, StudentMethods, StudentModel, TUserName } from './student.interface';
 import bcrypt from "bcrypt";
 import config from '../../config';
+import { boolean } from 'joi';
 
 const userNameSchema = new Schema<TUserName>({
     firstName: {
@@ -90,7 +91,7 @@ const studentSchema = new Schema<TStudent, StudentModel>({
     password: {
         type: String,
         required: [true, 'Password is required'],
-        max: [20, "Password can not be more than 20 characters"]
+        maxlength: [20, "Password can not be more than 20 characters"]
     },
     name: {
         type: userNameSchema,
@@ -157,8 +158,17 @@ const studentSchema = new Schema<TStudent, StudentModel>({
             message: "{VALUE} is not a valid status"
         },
         default: "active"
+    },
+    isDeleted: {
+        type: Boolean,
+        default: false
     }
-});
+},
+    {
+        toJSON: {
+            virtuals: true
+        }
+    });
 
 
 // pre save middleware / hook : will work on create() and save()
@@ -167,20 +177,44 @@ studentSchema.pre("save", async function (next) {
 
     // hashing password and save into DB
     // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const user = this;
+    const user = this; // doc
     user.password = await bcrypt.hash(user.password, Number(config.bcrypt_salt_rounds))
     next();
 })
 
 // post save middleware / hook
-studentSchema.post("save", function () {
-    console.log(this, "post hook : we saved our data");
+studentSchema.post("save", function (doc, next) {
+    doc.password = "";
+    next();
 })
 
 
+// Query Middleware find
+studentSchema.pre("find", function (next) {
+    // console.log(this);
+    this.find({ isDeleted: { $ne: true } });
+    next();
+})
+
+// Query Middleware findOne
+studentSchema.pre("findOne", function (next) {
+    // console.log(this);
+    this.findOne({ isDeleted: { $ne: true } });
+    next();
+})
+
+// Query Middleware aggregate
+studentSchema.pre("aggregate", function (next) {
+    // console.log(this);
+    this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } })
+    next();
+})
 
 
-
+// virtual
+studentSchema.virtual("fullName").get(function () {
+    return `${this.name.firstName} ${this.name.middleName} ${this.name.lastName}`;
+})
 
 
 
