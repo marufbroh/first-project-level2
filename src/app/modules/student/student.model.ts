@@ -1,7 +1,8 @@
 import { Schema, model } from 'mongoose';
 import validator from 'validator';
 import { TGuardian, TLocalGuardian, TStudent, StudentMethods, StudentModel, TUserName } from './student.interface';
-
+import bcrypt from "bcrypt";
+import config from '../../config';
 
 const userNameSchema = new Schema<TUserName>({
     firstName: {
@@ -80,11 +81,16 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
 });
 
 
-const studentSchema = new Schema<TStudent, StudentModel, StudentMethods>({
+const studentSchema = new Schema<TStudent, StudentModel>({
     id: {
         type: String,
         required: [true, 'ID is required'],
         unique: true
+    },
+    password: {
+        type: String,
+        required: [true, 'Password is required'],
+        max: [20, "Password can not be more than 20 characters"]
     },
     name: {
         type: userNameSchema,
@@ -154,10 +160,44 @@ const studentSchema = new Schema<TStudent, StudentModel, StudentMethods>({
     }
 });
 
-studentSchema.methods.isUserExists = async function (id: string) {
+
+// pre save middleware / hook : will work on create() and save()
+studentSchema.pre("save", async function (next) {
+    // console.log(this, "pre hook : we will save the data");
+
+    // hashing password and save into DB
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const user = this;
+    user.password = await bcrypt.hash(user.password, Number(config.bcrypt_salt_rounds))
+    next();
+})
+
+// post save middleware / hook
+studentSchema.post("save", function () {
+    console.log(this, "post hook : we saved our data");
+})
+
+
+
+
+
+
+
+
+// crating a custom static method
+
+studentSchema.statics.isUserExists = async function (id: string) {
     const existingUser = await Student.findOne({ id });
 
     return existingUser;
 }
+
+
+// create a custom instance
+// studentSchema.methods.isUserExists = async function (id: string) {
+//     const existingUser = await Student.findOne({ id });
+
+//     return existingUser;
+// }
 
 export const Student = model<TStudent, StudentModel>("Student", studentSchema)
