@@ -1,55 +1,51 @@
-import Joi from "joi";
+import { z, ZodError } from 'zod';
 
-// Define Joi schema for UserName
-const userNameValidationSchema = Joi.object({
-    firstName: Joi.string()
-        .required()
-        .trim()
-        .max(20)
-        .regex(/^[A-Z][a-z]*$/)
-        .message('First name must start with a capital letter and contain only alphabetic characters'),
-    middleName: Joi.string().trim(),
-    lastName: Joi.string()
-        .required()
-        .trim()
-        .regex(/^[A-Za-z]+$/)
-        .message('Last name must contain only alphabetic characters'),
+const userNameValidationSchema = z.object({
+    firstName: z.string()
+        .min(1, { message: "First name is required" })
+        .max(20, { message: "First Name can not be more than 20 characters" })
+        .refine(value => value.charAt(0).toUpperCase() + value.slice(1) === value, {
+            message: 'First name should be in capitalize format',
+        }),
+    middleName: z.string().optional(),
+    lastName: z.string()
+        // .refine(value => validator.isAlpha(value), { message: "Last name is not valid" })
+        .min(1, { message: "Last name is required" }),
 });
 
-// Define Joi schema for Guardian
-const guardianValidationSchema = Joi.object({
-    fatherName: Joi.string().required(),
-    fatherOccupation: Joi.string().required(),
-    fatherContactNo: Joi.string().required(),
-    motherName: Joi.string().required(),
-    motherOccupation: Joi.string().required(),
-    motherContactNo: Joi.string().required(),
+const guardianValidationSchema = z.object({
+    fatherName: z.string().min(1, { message: "Father's name is required" }),
+    fatherOccupation: z.string().min(1, { message: "Father's occupation is required" }),
+    fatherContactNo: z.string().min(1, { message: "Father's contact number is required" }),
+    motherName: z.string().min(1, { message: "Mother's name is required" }),
+    motherOccupation: z.string().min(1, { message: "Mother's occupation is required" }),
+    motherContactNo: z.string().min(1, { message: "Mother's contact number is required" }),
 });
 
-// Define Joi schema for LocalGuardian
-const localGuardianValidationSchema = Joi.object({
-    name: Joi.string().required(),
-    occupation: Joi.string().required(),
-    address: Joi.string().required(),
-    contactNo: Joi.string().required(),
+const localGuardianValidationSchema = z.object({
+    name: z.string().min(1, { message: "Local guardian's name is required" }),
+    occupation: z.string().min(1, { message: "Local guardian's occupation is required" }),
+    address: z.string().min(1, { message: "Local guardian's address is required" }),
+    contactNo: z.string().min(1, { message: "Local guardian's contact number is required" }),
 });
 
-// Define Joi schema for Student
-const studentValidationSchema = Joi.object({
-    id: Joi.string().required(),
-    name: userNameValidationSchema.required(),
-    gender: Joi.string().valid("male", "female", "other").required(),
-    dateOfBirth: Joi.string(),
-    email: Joi.string().email().required(),
-    contactNo: Joi.string().required(),
-    emergencyContactNo: Joi.string().required(),
-    bloodGroup: Joi.string().valid("A", "AB", "B", "O", "Rh+", "Rh-"),
-    presentAddress: Joi.string().required(),
-    permanentAddress: Joi.string().required(),
-    guardian: guardianValidationSchema.required(),
-    localGuardian: localGuardianValidationSchema.required(),
-    profileImg: Joi.string(),
-    isActive: Joi.string().valid("active", "blocked").default("active"),
+const studentValidationSchema = z.object({
+    id: z.string().min(1, { message: "ID is required" }),
+    name: userNameValidationSchema,
+    gender: z.enum(['male', 'female', 'other']),
+    dateOfBirth: z.string().optional(),
+    email: z.string()
+        .min(1, { message: "Email is required" })
+        .email({ message: "Email is not a valid email type" }),
+    contactNo: z.string().min(1, { message: "Contact number is required" }),
+    emergencyContactNo: z.string().min(1, { message: "Emergency contact number is required" }),
+    bloodGroup: z.enum(["A", "AB", "B", "O", "Rh+", "Rh-"]).optional(),
+    presentAddress: z.string().min(1, { message: "Present address is required" }),
+    permanentAddress: z.string().min(1, { message: "Permanent address is required" }),
+    guardian: guardianValidationSchema,
+    localGuardian: localGuardianValidationSchema,
+    profileImg: z.string().optional(),
+    isActive: z.enum(["active", "blocked"]).default("active"),
 });
 
-export default studentValidationSchema
+export default studentValidationSchema;
