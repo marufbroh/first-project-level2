@@ -3,7 +3,7 @@ import validator from 'validator';
 import { TGuardian, TLocalGuardian, TStudent, StudentMethods, StudentModel, TUserName } from './student.interface';
 import bcrypt from "bcrypt";
 import config from '../../config';
-import { boolean } from 'joi';
+// import { boolean } from 'joi';
 
 const userNameSchema = new Schema<TUserName>({
     firstName: {
