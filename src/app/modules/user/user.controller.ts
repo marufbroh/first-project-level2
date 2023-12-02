@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import studentValidationSchema from "../student/student.validation";
+// import studentValidationSchema from "../student/student.validation";
 import { UserServices } from "./user.service";
 
 const createStudent = async (req: Request, res: Response) => {
@@ -9,7 +9,7 @@ const createStudent = async (req: Request, res: Response) => {
         // const zodParseData = studentValidationSchema.parse(studentData);
         const result = await UserServices.createStudentIntoDB(password, studentData);
 
-        res.send(200).json({
+        res.status(200).json({
             success: true,
             message: "Student is created successfully",
             data: result
@@ -23,6 +23,6 @@ const createStudent = async (req: Request, res: Response) => {
     }
 }
 
-export const UserController = {
+export const UserControllers = {
     createStudent
 }
