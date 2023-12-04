@@ -37,7 +37,8 @@ export type TStudent = {
     permanentAddress: string;
     guardian: TGuardian;
     localGuardian: TLocalGuardian;
-    profileImg?: string; // amra database a URL lakhbo
+    profileImg?: string;
+    admissionSemester: Types.ObjectId;
     isDeleted: boolean
 }
 
