@@ -3,43 +3,30 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ErrorRequestHandler } from "express";
 import { ZodError, ZodIssue } from "zod";
-import { TErrorSource } from "../interface/error";
+import { TErrorSources } from "../interface/error";
 import config from "../config";
+import handleZodError from "../errors/handleZodError";
+import handleValidationError from "../errors/handleValidationError";
 
 const globalErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
     let statusCode = error.statusCode || 500;
     let message = error.message || "Something went wrong!";
-    let errorSources: TErrorSource = [{
+    let errorSources: TErrorSources = [{
         path: '',
         message: 'Something went wrong!'
     }];
-
-
-    const handleZodError = (error: ZodError) => {
-        const errorSources: TErrorSource = error.issues.map((issue: ZodIssue) => {
-            return {
-                path: issue?.path[issue.path.length - 1],
-                message: issue.message,
-            }
-        })
-
-        const statusCode = 400
-
-        return {
-            statusCode,
-            message: "Validation Error",
-            errorSources,
-        }
-    }
-
 
     if (error instanceof ZodError) {
         const simplifiedError = handleZodError(error);
         statusCode = simplifiedError?.statusCode;
         message = simplifiedError?.message;
         errorSources = simplifiedError?.errorSources;
+    } else if (error?.name === "ValidationError") {
+        const simplifiedError = handleValidationError(error);
+        statusCode = simplifiedError?.statusCode;
+        message = simplifiedError?.message;
+        errorSources = simplifiedError?.errorSources;
     }
-
 
     return res.status(statusCode).json({
         success: false,
