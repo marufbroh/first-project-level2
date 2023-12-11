@@ -197,8 +197,6 @@ studentSchema.virtual("fullName").get(function () {
     return `${this?.name?.firstName} ${this?.name?.middleName} ${this?.name?.lastName}`;
 })
 
-
-
 // crating a custom static method
 
 studentSchema.statics.isUserExists = async function (id: string) {
