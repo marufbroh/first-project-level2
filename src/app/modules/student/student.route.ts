@@ -1,17 +1,20 @@
-import express from "express"
-import { StudentControllers } from "./student.controller";
-import validateRequest from "../../middlewares/validateRequest";
-import { studentValidations } from "./student.validation";
+import express from 'express';
+import validateRequest from '../../middlewares/validateRequest';
+import { StudentControllers } from './student.controller';
+import { updateStudentValidationSchema } from './student.validation';
 
 const router = express.Router();
 
-// will call controller func
-router.get("/", StudentControllers.getAllStudents)
+router.get('/', StudentControllers.getAllStudents);
 
-router.get("/:id", StudentControllers.getSingleStudent);
+router.get('/:id', StudentControllers.getSingleStudent);
 
-router.patch("/:id", validateRequest(studentValidations.updateStudentValidationSchema), StudentControllers.updateStudent);
+router.patch(
+  '/:id',
+  validateRequest(updateStudentValidationSchema),
+  StudentControllers.updateStudent,
+);
 
-router.delete("/:id", StudentControllers.deleteStudent);
+router.delete('/:id', StudentControllers.deleteStudent);
 
 export const StudentRoutes = router;

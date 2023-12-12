@@ -6,21 +6,21 @@ import { AcademicFacultyValidation } from './academicFaculty.validation';
 const router = express.Router();
 
 router.post(
-    '/create-academic-faculty',
-    validateRequest(
-        AcademicFacultyValidation.createAcademicFacultyValidationSchema,
-    ),
-    AcademicFacultyControllers.createAcademicFaculty,
+  '/create-academic-faculty',
+  validateRequest(
+    AcademicFacultyValidation.createAcademicFacultyValidationSchema,
+  ),
+  AcademicFacultyControllers.createAcademicFaculty,
 );
 
-router.get('/:facultyId', AcademicFacultyControllers.getSingleAcademicFaculty);
+router.get('/:id', AcademicFacultyControllers.getSingleAcademicFaculty);
 
 router.patch(
-    '/:facultyId',
-    validateRequest(
-        AcademicFacultyValidation.updateAcademicFacultyValidationSchema,
-    ),
-    AcademicFacultyControllers.updateAcademicFaculty,
+  '/:id',
+  validateRequest(
+    AcademicFacultyValidation.updateAcademicFacultyValidationSchema,
+  ),
+  AcademicFacultyControllers.updateAcademicFaculty,
 );
 
 router.get('/', AcademicFacultyControllers.getAllAcademicFaculties);
