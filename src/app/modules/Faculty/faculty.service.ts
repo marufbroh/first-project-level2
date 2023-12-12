@@ -49,7 +49,11 @@ const updateFacultyIntoDB = async (id: string, payload: Partial<TFaculty>) => {
   return result;
 };
 
+<<<<<<< HEAD
 const deleteStudentFromDB = async (id: string) => {
+=======
+const deleteFacultyFromDB = async (id: string) => {
+>>>>>>> a3901ce68757695d8ab3b30d1833b3be28f06f92
   const session = await mongoose.startSession();
 
   try {
@@ -93,5 +97,9 @@ export const FacultyServices = {
   getAllFacultiesFromDB,
   getSingleFacultyFromDB,
   updateFacultyIntoDB,
+<<<<<<< HEAD
   deleteStudentFromDB,
+=======
+  deleteFacultyFromDB,
+>>>>>>> a3901ce68757695d8ab3b30d1833b3be28f06f92
 };
