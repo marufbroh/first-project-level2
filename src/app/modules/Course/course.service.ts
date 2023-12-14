@@ -35,6 +35,7 @@ const getSingleCourseFromDB = async (id: string) => {
 
 const updateCourseIntoDB = async (id: string, payload: Partial<TCourse>) => {
   const { preRequisiteCourses, ...courseRemainingData } = payload;
+  // console.log({ preRequisiteCourses }, { courseRemainingData });
 
   const session = await mongoose.startSession();
 
