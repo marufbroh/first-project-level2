@@ -18,13 +18,13 @@ router.get(
   SemesterRegistrationController.getSingleSemesterRegistration,
 );
 
-// router.patch(
-//   '/:id',
-//   validateRequest(
-//     SemesterRegistrationValidations.upadateSemesterRegistrationValidationSchema,
-//   ),
-//   SemesterRegistrationController.updateSemesterRegistration,
-// );
+router.patch(
+  '/:id',
+  validateRequest(
+    SemesterRegistrationValidations.upadateSemesterRegistrationValidationSchema,
+  ),
+  SemesterRegistrationController.updateSemesterRegistration,
+);
 
 router.get(
   '/:id',
