@@ -10,7 +10,10 @@ const createSemesterRegistrationIntoDB = async (payload: TSemesterRegistration) 
     const academicSemester = payload.academicSemester;
 
     const isThereAnyUpcomingOrOngoingSEmester = await SemesterRegistration.findOne({
-        $or: [{ status: 'UPCOMING' }, { status: 'ONGOING' }]
+        $or: [
+            { status: RegistrationStatus.UPCOMING },
+            { status: RegistrationStatus.ONGOING },
+        ],
     });
 
     if (isThereAnyUpcomingOrOngoingSEmester) {
