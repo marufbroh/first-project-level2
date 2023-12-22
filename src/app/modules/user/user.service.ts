@@ -3,6 +3,7 @@ import httpStatus from 'http-status';
 import mongoose from 'mongoose';
 import config from '../../config';
 import AppError from '../../errors/AppError';
+import { TAdmin } from '../Admin/admin.interface';
 import { Admin } from '../Admin/admin.model';
 import { TFaculty } from '../Faculty/faculty.interface';
 import { Faculty } from '../Faculty/faculty.model';
@@ -29,11 +30,11 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
   userData.role = 'student';
 
   // find academic semester info
-  const academicDepartment = await AcademicSemester.findById(
-    payload.academicDepartment,
+  const admissionSemester = await AcademicSemester.findById(
+    payload.admissionSemester,
   );
 
-  if (!academicDepartment) {
+  if (!admissionSemester) {
     throw new AppError(400, 'Admission semester not found');
   }
 
@@ -42,7 +43,7 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
   try {
     session.startTransaction();
     //set  generated id
-    userData.id = await generateStudentId(academicDepartment);
+    userData.id = await generateStudentId(admissionSemester);
 
     // create a user (transaction-1)
     const newUser = await User.create([userData], { session }); // array
@@ -130,7 +131,7 @@ const createFacultyIntoDB = async (password: string, payload: TFaculty) => {
   }
 };
 
-const createAdminIntoDB = async (password: string, payload: TFaculty) => {
+const createAdminIntoDB = async (password: string, payload: TAdmin) => {
   // create a user object
   const userData: Partial<TUser> = {};
 
