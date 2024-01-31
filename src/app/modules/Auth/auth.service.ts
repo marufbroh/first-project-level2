@@ -193,7 +193,7 @@ const forgetPassword = async (userId: string) => {
 
     sendEmail(user.email, resetUILink);
 
-    console.log(resetUILink);
+    // console.log(resetUILink);
 };
 
 
@@ -227,7 +227,7 @@ const resetPassword = async (
     ) as JwtPayload;
 
     if (payload.id !== decoded.userId) {
-        console.log(payload.id, decoded.userId);
+        // console.log(payload.id, decoded.userId);
         throw new AppError(httpStatus.FORBIDDEN, 'You are forbidden!');
     }
 
