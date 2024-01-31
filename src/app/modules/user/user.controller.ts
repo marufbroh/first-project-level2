@@ -6,7 +6,11 @@ import { UserServices } from './user.service';
 const createStudent = catchAsync(async (req, res) => {
   const { password, student: studentData } = req.body;
 
-  const result = await UserServices.createStudentIntoDB(req.file, password, studentData);
+  const result = await UserServices.createStudentIntoDB(
+    req.file,
+    password,
+    studentData,
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -19,7 +23,11 @@ const createStudent = catchAsync(async (req, res) => {
 const createFaculty = catchAsync(async (req, res) => {
   const { password, faculty: facultyData } = req.body;
 
-  const result = await UserServices.createFacultyIntoDB(req.file, password, facultyData);
+  const result = await UserServices.createFacultyIntoDB(
+    req.file,
+    password,
+    facultyData,
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -32,7 +40,11 @@ const createFaculty = catchAsync(async (req, res) => {
 const createAdmin = catchAsync(async (req, res) => {
   const { password, admin: adminData } = req.body;
 
-  const result = await UserServices.createAdminIntoDB(req.file, password, adminData);
+  const result = await UserServices.createAdminIntoDB(
+    req.file,
+    password,
+    adminData,
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -41,7 +53,6 @@ const createAdmin = catchAsync(async (req, res) => {
     data: result,
   });
 });
-
 
 const getMe = catchAsync(async (req, res) => {
   // const token = req.headers.authorization;
@@ -62,7 +73,6 @@ const getMe = catchAsync(async (req, res) => {
   });
 });
 
-
 const changeStatus = catchAsync(async (req, res) => {
   const id = req.params.id;
 
@@ -81,5 +91,5 @@ export const UserControllers = {
   createFaculty,
   createAdmin,
   getMe,
-  changeStatus
+  changeStatus,
 };

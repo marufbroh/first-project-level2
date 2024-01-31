@@ -25,6 +25,10 @@ router.patch(
   AcademicSemesterControllers.updateAcademicSemester,
 );
 
-router.get('/', auth(USER_ROLE.admin), AcademicSemesterControllers.getAllAcademicSemesters);
+router.get(
+  '/',
+  auth(USER_ROLE.admin),
+  AcademicSemesterControllers.getAllAcademicSemesters,
+);
 
 export const AcademicSemesterRoutes = router;

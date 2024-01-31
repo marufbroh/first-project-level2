@@ -180,7 +180,6 @@ const updateOfferedCourseIntoDB = async (
   const semesterRegistration = isOfferedCourseExists.semesterRegistration;
   // get the schedules of the faculties
 
-
   // Checking the status of the semester registration
   const semesterRegistrationStatus =
     await SemesterRegistration.findById(semesterRegistration);

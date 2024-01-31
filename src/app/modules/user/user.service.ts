@@ -20,7 +20,11 @@ import {
 } from './user.utils';
 import { sendImageToCloudinary } from '../../utils/sendImageToCloudinary';
 
-const createStudentIntoDB = async (file: any, password: string, payload: TStudent) => {
+const createStudentIntoDB = async (
+  file: any,
+  password: string,
+  payload: TStudent,
+) => {
   // create a user object
   const userData: Partial<TUser> = {};
 
@@ -82,7 +86,11 @@ const createStudentIntoDB = async (file: any, password: string, payload: TStuden
   }
 };
 
-const createFacultyIntoDB = async (file: any, password: string, payload: TFaculty) => {
+const createFacultyIntoDB = async (
+  file: any,
+  password: string,
+  payload: TFaculty,
+) => {
   // create a user object
   const userData: Partial<TUser> = {};
 
@@ -145,7 +153,11 @@ const createFacultyIntoDB = async (file: any, password: string, payload: TFacult
   }
 };
 
-const createAdminIntoDB = async (file: any, password: string, payload: TAdmin) => {
+const createAdminIntoDB = async (
+  file: any,
+  password: string,
+  payload: TAdmin,
+) => {
   // create a user object
   const userData: Partial<TUser> = {};
 
@@ -198,7 +210,6 @@ const createAdminIntoDB = async (file: any, password: string, payload: TAdmin) =
   }
 };
 
-
 const getMe = async (userId: string, role: string) => {
   // const decoded = verifyToken(token, config.jwt_access_secret as string);
   // const { userId, role } = decoded;
@@ -230,5 +241,5 @@ export const UserServices = {
   createFacultyIntoDB,
   createAdminIntoDB,
   getMe,
-  changeStatus
+  changeStatus,
 };
