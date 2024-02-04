@@ -226,9 +226,6 @@ const createAdminIntoDB = async (
 };
 
 const getMe = async (userId: string, role: string) => {
-  // const decoded = verifyToken(token, config.jwt_access_secret as string);
-  // const { userId, role } = decoded;
-
   let result = null;
   if (role === 'student') {
     result = await Student.findOne({ id: userId }).populate('user');
