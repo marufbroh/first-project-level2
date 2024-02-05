@@ -16,10 +16,11 @@ router.post(
   AcademicSemesterControllers.createAcademicSemester,
 );
 
-router.get('/:courseId', AcademicSemesterControllers.getSingleAcademicSemester);
+router.get('/:courseId', auth(USER_ROLE.superAdmin, USER_ROLE.admin, USER_ROLE.faculty, USER_ROLE.student), AcademicSemesterControllers.getSingleAcademicSemester);
 
 router.patch(
   '/:courseId',
+  auth(USER_ROLE.superAdmin, USER_ROLE.admin),
   validateRequest(
     AcademicSemesterValidations.updateAcademicSemesterValidationSchema,
   ),
@@ -28,7 +29,7 @@ router.patch(
 
 router.get(
   '/',
-  auth(USER_ROLE.admin),
+  auth(USER_ROLE.superAdmin, USER_ROLE.admin, USER_ROLE.faculty, USER_ROLE.student),
   AcademicSemesterControllers.getAllAcademicSemesters,
 );
 
