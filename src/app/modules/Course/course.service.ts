@@ -1,10 +1,10 @@
+import httpStatus from 'http-status';
 import mongoose from 'mongoose';
 import QueryBuilder from '../../builder/QueryBuilder';
-import { CourseSearchableFields } from './course.constant';
-import { TCourse, TCourseFaculty } from './course.interface';
-import { Course, CourseFaculty } from './course.model';
 import AppError from '../../errors/AppError';
-import httpStatus from 'http-status';
+import { CourseSearchableFields } from './course.constant';
+import { TCourse, TCoursefaculty } from './course.interface';
+import { Course, CourseFaculty } from './course.model';
 
 const createCourseIntoDB = async (payload: TCourse) => {
   const result = await Course.create(payload);
@@ -40,12 +40,12 @@ const getSingleCourseFromDB = async (id: string) => {
 
 const updateCourseIntoDB = async (id: string, payload: Partial<TCourse>) => {
   const { preRequisiteCourses, ...courseRemainingData } = payload;
-  // console.log({ preRequisiteCourses }, { courseRemainingData });
 
   const session = await mongoose.startSession();
 
   try {
     session.startTransaction();
+
     //step1: basic course info update
     const updatedBasicCourseInfo = await Course.findByIdAndUpdate(
       id,
@@ -58,7 +58,7 @@ const updateCourseIntoDB = async (id: string, payload: Partial<TCourse>) => {
     );
 
     if (!updatedBasicCourseInfo) {
-      throw new AppError(httpStatus.BAD_REQUEST, 'Failed to update course!');
+      throw new AppError(httpStatus.BAD_REQUEST, 'Failed to update course');
     }
 
     // check if there is any pre requisite courses to update
@@ -83,7 +83,7 @@ const updateCourseIntoDB = async (id: string, payload: Partial<TCourse>) => {
       );
 
       if (!deletedPreRequisiteCourses) {
-        throw new AppError(httpStatus.BAD_REQUEST, 'Failed to update course!');
+        throw new AppError(httpStatus.BAD_REQUEST, 'Failed to update course');
       }
 
       // filter out the new course fields
@@ -104,7 +104,7 @@ const updateCourseIntoDB = async (id: string, payload: Partial<TCourse>) => {
       );
 
       if (!newPreRequisiteCourses) {
-        throw new AppError(httpStatus.BAD_REQUEST, 'Failed to update course!');
+        throw new AppError(httpStatus.BAD_REQUEST, 'Failed to update course');
       }
     }
 
@@ -136,7 +136,7 @@ const deleteCourseFromDB = async (id: string) => {
 
 const assignFacultiesWithCourseIntoDB = async (
   id: string,
-  payload: Partial<TCourseFaculty>,
+  payload: Partial<TCoursefaculty>,
 ) => {
   const result = await CourseFaculty.findByIdAndUpdate(
     id,
@@ -149,7 +149,6 @@ const assignFacultiesWithCourseIntoDB = async (
       new: true,
     },
   );
-
   return result;
 };
 
@@ -162,7 +161,7 @@ const getFacultiesWithCourseFromDB = async (courseId: string) => {
 
 const removeFacultiesFromCourseFromDB = async (
   id: string,
-  payload: Partial<TCourseFaculty>,
+  payload: Partial<TCoursefaculty>,
 ) => {
   const result = await CourseFaculty.findByIdAndUpdate(
     id,

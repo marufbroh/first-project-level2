@@ -1,12 +1,12 @@
 import httpStatus from 'http-status';
 import QueryBuilder from '../../builder/QueryBuilder';
 import AppError from '../../errors/AppError';
-import { AcademicDepartment } from '../academicDepartment/academicDepartment.model';
-import { AcademicFaculty } from '../academicFaculty/academicFaculty.model';
+import { AcademicDepartment } from '../AcademicDepartment/academicDepartment.model';
+import { AcademicFaculty } from '../AcademicFaculty/academicFaculty.model';
 import { Course } from '../Course/course.model';
 import { Faculty } from '../Faculty/faculty.model';
-import { SemesterRegistration } from '../semesterRegistration/semesterRegistration.model';
-import { Student } from '../student/student.model';
+import { SemesterRegistration } from '../SemesterRegistration/semesterRegistration.model';
+import { Student } from '../Student/student.model';
 import { TOfferedCourse } from './OfferedCourse.interface';
 import { OfferedCourse } from './OfferedCourse.model';
 import { hasTimeConflict } from './OfferedCourse.utils';
@@ -161,7 +161,7 @@ const getMyOfferedCoursesFromDB = async (
   const student = await Student.findOne({ id: userId });
   // find the student
   if (!student) {
-    throw new AppError(httpStatus.NOT_FOUND, 'User is not found');
+    throw new AppError(httpStatus.NOT_FOUND, 'User is noty found');
   }
 
   //find current ongoing semester
